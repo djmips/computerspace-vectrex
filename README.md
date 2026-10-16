@@ -30,6 +30,21 @@ Output: `build\computerspace.bin`, a standard single-bank cartridge of at most 3
   `vecx-run.exe --headless --bios skip --seconds 3 --png-at 2.5 build\computerspace.bin`
 - **Hardware:** copy `build\computerspace.bin` to a VEXTREME or UVMC2 multicart.
 
+## Spec and tools
+
+`docs/spec.md` is the game specification extracted from the FPGA core, with citations, measurements
+and the Vectrex design decisions.
+
+| Path | What |
+|---|---|
+| `data/stars.txt` | the original star field (375 visible pixels) from a simulation of the core |
+| `tools/optstars.py` | picks and orders stars, generates the dot-to-dot drawing code (`--half=0/1` for the interlaced field) |
+| `tools/headings.py`, `tools/match.py` | the 32 rocket headings from the core's 4 base images |
+| `tools/sim/` | GHDL testbench that runs the core with scripted inputs and dumps lit pixels per frame (`run_spec.sh`) |
+| `tools/analyse.py` | reads those dumps |
+
+The tools read the core from `CS_RTL`, by default the sibling checkout `..\computerspace\rtl`.
+
 ## Notes
 
 - After `Reset0Ref` the integrators stay held at zero (VIA PCR `$CC`) until a `Moveto`; `Draw_VLc`

@@ -8,3 +8,8 @@ build/
 *.pre.s
 *.pre.asx.s
 *.rel
+
+# Python and simulation scratch
+__pycache__/
+tools/sim/build/
+tools/sim/out/
