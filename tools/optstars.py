@@ -12,6 +12,7 @@ import math
 import random
 import sys
 import pathlib
+from vxparams import FLIP
 
 RAMP_EXTRA = 3
 # Square pixels: the original's 256 visible pixels fill only ~83% of a TV line (256 of 382
@@ -91,42 +92,56 @@ else:
 print(f"{len(order)} stars, model cost {tour_cost(order)} cycles")
 
 # --- code generation ---
-L = []
-def emit(dy, dx, sc):
-    L.extend([f"                    lda      #{sc}",
-               "                    sta      <VIA_t1_cnt_lo",
-              f"                    lda      #{dy}",
-               "                    sta      <VIA_port_a",
-               "                    clr      <VIA_port_b",
-              f"                    ldb      #{dx}",
-               "                    nop",
-               "                    nop",
-               "                    inc      <VIA_port_b",
-               "                    stb      <VIA_port_a",
-               "                    clrb",
-               "                    stb      <VIA_shift_reg",
-               "                    clr      <VIA_t1_cnt_hi"])
-    L.extend(["                    nop"] * ((sc + 12 + 1) // 2))
-    L.extend(["                    lda      #$ff",
-              "                    sta      <VIA_shift_reg"])
-
+# Pipelined: while a star's move ramps, the next star's scale goes into the T1 latch (the running
+# timer ignores it) and its dY into A, so they cost no time of their own. The light comes at the
+# same time after the T1 write as the hardware-confirmed version (write ~scale + 19 cycles after),
+# never earlier.
+moves = []
 cur = (0.0, 0.0)
 worst = 0.0
-cycles = 0
 for p in order:
     dy, dx = p[0] - cur[0], p[1] - cur[1]
     sc = scale_for(dy, dx)
     k = (sc + RAMP_EXTRA) / (BASE + RAMP_EXTRA)
     jy = max(-127, min(127, round(dy / k)))
     jx = max(-127, min(127, round(dx / k)))
-    emit(jy, jx, sc)
-    cycles += 40 + 6 + (sc + 12) + 6
-    cur = (cur[0] + jy * k, cur[1] + jx * k)     # where the beam really is
+    moves.append((jy * FLIP, jx * FLIP, sc))
+    cur = (cur[0] + jy * k, cur[1] + jx * k)     # where the beam really is (unflipped)
     worst = max(worst, abs(cur[0] - p[0]), abs(cur[1] - p[1]))
-L.append("                    lda      #16")
-L.append("                    sta      <VIA_t1_cnt_lo")
-L.append("                    clrb")
-L.append("                    stb      <VIA_shift_reg")
+
+L = [f"                    lda      #{moves[0][2]}",
+      "                    sta      <VIA_t1_cnt_lo",
+     f"                    lda      #{moves[0][0]}"]
+cycles = 8
+for n, (dy, dx, sc) in enumerate(moves):
+    L += ["                    sta      <VIA_port_a",
+          "                    clr      <VIA_port_b",
+         f"                    ldb      #{dx}",
+          "                    nop",
+          "                    nop",
+          "                    inc      <VIA_port_b",
+          "                    stb      <VIA_port_a",
+          "                    clrb",
+          "                    stb      <VIA_shift_reg",
+          "                    clr      <VIA_t1_cnt_hi"]
+    if n + 1 < len(moves):
+        ny, nx, nsc = moves[n + 1]
+        L += [f"                    lda      #{nsc}",
+               "                    sta      <VIA_t1_cnt_lo",
+              f"                    lda      #{ny}"]
+    else:
+        L += ["                    nop"] * 4                  # the same 8 cycles
+    t_old = 2 * ((sc + 12 + 1) // 2) + 6                     # the confirmed write time
+    k = max(0, -(-(t_old - 14) // 2))                        # ceil((t_old - 14) / 2)
+    L += ["                    nop"] * k
+    L += ["                    ldb      #$ff",
+          "                    stb      <VIA_shift_reg"]
+    cycles += 38 + 8 + 2 * k + 6
+L += ["                    nop"] * 6                          # the last star glows like the rest
+L += ["                    lda      #16",
+      "                    sta      <VIA_t1_cnt_lo",
+      "                    clrb",
+      "                    stb      <VIA_shift_reg"]
 open(out, "w").write(chr(10).join(L) + chr(10))
 print(f"generated: {len(order)} moves, est {cycles} cycles, worst position error {worst:.2f} units "
       f"({worst / KX:.2f} original px)")
