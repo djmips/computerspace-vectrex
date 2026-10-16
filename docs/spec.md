@@ -175,9 +175,28 @@ star while the next move is set up; blank moves where a jump exceeds one move's 
 ## 10. Vectrex design notes (not part of the original)
 
 Decided (2026-10-16):
-- **Playfield rotated 90°** to fill the portrait screen: the 4:3 field becomes 3:4, matching the
-  Vectrex. Original x maps to Vectrex vertical, original y to Vectrex horizontal (direction of the
-  mapping still to choose); the score/timer column becomes a row.
+- **Playfield rotated 90°**: original x -> Vectrex Y (up), original y -> Vectrex X (right), a true
+  rotation (anticlockwise), so original "up" is Vectrex left. The score/timer column becomes a row.
+- **Square pixels** (corrected 2026-10-16). The original's field is *not* 4:3: its 256 visible
+  pixels fill only ~83% of a TV line (256 of 382 game clocks, ~44 of ~52 us) while its 239 lines fill
+  the height, so its pixels are close to square. An 8:7 mapping (assuming 4:3) visibly distorted the
+  rotating ship on hardware. Now 7 DAC units per pixel at scale 16 on both axes: the field is about
+  239 x 256, full width and ~80% of the Vectrex screen height.
+- **The 16 blanked lines are dropped**: the wrap space is 256 x 239, all visible; nothing can hide
+  in an invisible band. The rocket's start (column 114, row -14) is on the wrap seam.
+- **Objects crossing an edge** are drawn once per copy (up to four at a corner), lighting only the
+  dots that fall inside the field.
+- **Pre-rotated ship.** The core's 32 headings (flips/transposes of 4 base images) have uneven
+  proportions (length/width 1.19-1.34) and uneven angle steps (7-22 degrees): fine on the original's
+  soft TV, plainly wrong on the Vectrex. The ship is the core's heading-0 image rotated about its
+  centroid to exactly 5.625 + 11.25 h degrees (`tools/rocketgen.py`; `--diode` gives the core's own
+  images). Length/width is now 1.24 at every heading.
+- **Dot chains must re-anchor on hardware.** A ship drawn as one chain of 15 relative dot moves went
+  skinny at the diagonals on a real Vectrex (fine in vecx-run); the dot scale (8/16/32) and a longer Y
+  sample/hold settle made no difference; drawing each dot from a freshly zeroed beam fixed it (shape
+  test). The error builds up along a chain. Re-zeroing (Reset0Ref + move to
+  the grid corner) every 3 dots looks good, every 5 is acceptable; ~430 cycles per re-anchor.
+  Ship dots move at scale 16 (`tools/vxparams.py`: DOT_SCALE, ANCHOR_EVERY).
 - **Stars: the full original field, interlaced and dimmed** (revised 2026-10-16 after a hardware
   comparison). The 375 visible stars are split into two halves of ~188, each spread over the whole
   field (alternate entries of a farthest-point ordering), drawn on alternate frames: each star

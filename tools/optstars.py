@@ -14,7 +14,10 @@ import sys
 import pathlib
 
 RAMP_EXTRA = 3
-KY, KX = 8, 7                     # DAC units per original pixel at scale 16
+# Square pixels: the original's 256 visible pixels fill only ~83% of a TV line (256 of 382
+# game clocks, ~44 of ~52 us) while its 239 lines fill the height, so its pixels are close to
+# square and the 32 rocket headings (flips and transposes of 4 images) look like true rotations.
+KY, KX = 7, 7                     # DAC units per original pixel at scale 16
 BASE = 16
 PAD_LIT = 14                      # NOPs after the T1 write at scale 16 (hardware-confirmed)
 

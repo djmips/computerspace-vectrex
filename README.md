@@ -40,6 +40,9 @@ and the Vectrex design decisions.
 | `data/stars.txt` | the original star field (375 visible pixels) from a simulation of the core |
 | `tools/optstars.py` | picks and orders stars, generates the dot-to-dot drawing code (`--half=0/1` for the interlaced field) |
 | `tools/headings.py`, `tools/match.py` | the 32 rocket headings from the core's 4 base images |
+| `tools/rocketgen.py` | the ship's 32 headings as dot chains (`rocket.inc`), pre-rotated, re-anchored every 3 dots |
+| `tools/postab.py` | position tables for placing objects on the rotated field (`postab.inc`) |
+| `tools/vxparams.py` | drawing constants shared by the generators |
 | `tools/sim/` | GHDL testbench that runs the core with scripted inputs and dumps lit pixels per frame (`run_spec.sh`) |
 | `tools/analyse.py` | reads those dumps |
 
