@@ -1,0 +1,10 @@
+# Build output (build.ps1 moves Asmj's .bin/.cnt here)
+build/
+
+# Files Asmj or the VIDE IDE may leave beside the source
+*.bin
+*.cnt
+*.lst
+*.pre.s
+*.pre.asx.s
+*.rel

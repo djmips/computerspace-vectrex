@@ -1,0 +1,34 @@
+<?xml version="1.0"?>
+<AllProjectProperties>
+	<ProjectProperties>
+		<Class>Project</Class>
+		<Name>ComputerSpace</Name>
+		<ProjectName>ComputerSpace</ProjectName>
+		<DirectoryName></DirectoryName>
+		<Path>projects</Path>
+		<MainFile>computerspace.asm</MainFile>
+		<Description>Computer Space (Nutting Associates, 1971) for the Vectrex</Description>
+		<Version>0.1</Version>
+		<Author>djmips</Author>
+		<Bankswitching>none</Bankswitching>
+		<createBankswitchCode>false</createBankswitchCode>
+		<createGameLoopCode>false</createGameLoopCode>
+		<NumberOfBanks>1</NumberOfBanks>
+		<BankMainFiless>
+			<BankMainFiles>computerspace.asm</BankMainFiles>
+		</BankMainFiless>
+		<Extras>0</Extras>
+		<ProjectPreScriptClass></ProjectPreScriptClass>
+		<ProjectPreScriptName></ProjectPreScriptName>
+		<ProjectPostScriptClass></ProjectPostScriptClass>
+		<ProjectPostScriptName></ProjectPostScriptName>
+		<BankDefiness>
+			<BankDefines></BankDefines>
+		</BankDefiness>
+		<WheelName></WheelName>
+		<IsCDebugging>false</IsCDebugging>
+		<IsCProject>false</IsCProject>
+		<IsPeerCProject>false</IsPeerCProject>
+		<CFLAGS></CFLAGS>
+	</ProjectProperties>
+</AllProjectProperties>
