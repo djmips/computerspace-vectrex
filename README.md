@@ -8,7 +8,7 @@ The game rules, timings and artwork come from the gate-level FPGA recreation of 
 
 ## Status
 
-Playable, tested in vecx-run (the drawing methods on a real Vectrex):
+Finished: played and tuned on a real Vectrex, and tested in vecx-run:
 the rotated playfield with the original's interlaced star field; the rocket (32 pre-rotated
 headings, rotation and thrust as on the original, the engine flame); two saucers with their rotating
 light, direction changes and aimed missiles; the steerable rocket missile; box collisions,
@@ -34,7 +34,8 @@ The same order as the cabinet's control panel, left to right: Fire Missile, Thru
 
 Score a point by hitting a saucer with your missile (it steers with the rocket); the saucers score
 when their missile hits you. A game is 99 time units; finish ahead and you get one more round in
-hyperspace (brighter stars, standing in for the original's inverted picture).
+hyperspace (a burst of flashes and a blinking time, standing in for the original's inverted
+picture).
 
 ## Building
 
