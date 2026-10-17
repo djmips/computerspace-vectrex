@@ -296,7 +296,7 @@ Decided (2026-10-16):
   beeping at 9 Hz (on for the high half of the rotate clock, as the original gates it with
   `thrust_and_rotate_clk`, `memory_board.vhd:968-969`);
   B: saucer missile tone (3,906/3,750/3,750 Hz, averaging 3,802 Hz; the core: counter bit 9, line rate / 4 = 3,818 Hz; confirmed by ear
-  against the DE1 and a video of a cabinet; volume 8); C: noise: drone (quiet), thrust (louder, brighter), explosion
+  against the DE1 and a video of a cabinet; volume 8); C: noise: the background drone through a game (the core's ambiance voice; volume 6, ~10 dB under the thrust), thrust (louder, brighter), explosion
   as the core's (`computer_space_sound.vhd:320-400`): 0.38 s held, then a
   2.84 s linear fade (a per-frame volume table), tone C at a random 84-156 Hz each frame chopping the
   lowest noise (the AY ANDs them) for the rumble; restarted per hit (was one 1 s PSG envelope decay,

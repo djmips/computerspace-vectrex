@@ -29,7 +29,9 @@ VOL_RM              equ      9                      ; (11 was too loud on hardwa
 VOL_SM              equ      8                      ; (10 was too loud on hardware)
 VOL_TURN            equ      7
 NOISE_DRONE         equ      31                     ; the background drone: low noise, quiet
-VOL_DRONE           equ      4
+VOL_DRONE           equ      6                      ; the core: ~10.6 dB under the thrust (RMS of
+                                                    ; its filter weights, /16 vs /8): 3 dB a step
+                                                    ; below VOL_THRUST (4 was ~6 dB too quiet)
 NOISE_THRUST        equ      10                     ; thrust: brighter, louder
 VOL_THRUST          equ      10
 NOISE_BOOM          equ      31                     ; explosion: the lowest noise,
