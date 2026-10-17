@@ -58,14 +58,43 @@ game_start
                     clr      rm_on
                     clr      sm_on
                     lda      #START_HIDE
-                    sta      rk_hide
-                    clr      rk_heading
-                    clr      rk_vx
-                    clr      rk_vy
-                    ldd      #114*256               ; the original's start: column 114,
-                    std      rk_x
-                    ldd      #(FIELD_H-14)*256      ; row -14 (on the wrap seam)
+                    sta      rk_hide                ; the rocket keeps its heading, velocity
+                    tst      rk_cold                ; and position from the last game (as on
+                    beq      gs_done                ; the original: nothing resets them)
+                    ; the first game: the rocket's state as the original's counters power up,
+                    ; at random; seeded by when the player pressed (the frame count)
+                    clr      rk_cold
+                    lda      frame_count
+                    eora     rng
+                    bne      gs_seed
+                    lda      #$5A                   ; the LFSR must not be 0
+gs_seed             sta      rng
+                    jsr      random
+                    clrb
+                    std      rk_x                   ; column 0..255
+                    jsr      random
+                    cmpa     #FIELD_H
+                    blo      gs_y
+                    suba     #FIELD_H               ; row 0..238
+gs_y                clrb
                     std      rk_y
+                    jsr      random
+                    anda     #31
+                    sta      rk_heading
+                    jsr      gs_level
+                    sta      rk_vx
+                    jsr      gs_level
+                    sta      rk_vy
+gs_done             rts
+
+; gs_level: A = a random velocity level, -7..7
+gs_level
+                    jsr      random
+                    anda     #15
+                    cmpa     #15
+                    blo      gl_ok
+                    lsra                            ; 15 -> 7
+gl_ok               suba     #7
                     rts
 
 ;***************************************************************************

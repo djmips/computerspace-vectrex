@@ -24,10 +24,13 @@ Power on: the BIOS title, then attract mode (the saucers fly). Any button starts
 
 | Button | Cabinet control |
 |---|---|
-| 1 | rotate anticlockwise |
-| 2 | rotate clockwise |
-| 3 | thrust |
-| 4 | fire (hold to refire) |
+| 1 | fire (hold to refire) |
+| 2 | thrust |
+| 3 | rotate anticlockwise |
+| 4 | rotate clockwise |
+
+The same order as the cabinet's control panel, left to right: Fire Missile, Thrust, Rotate
+(anticlockwise), Rotate (clockwise).
 
 Score a point by hitting a saucer with your missile (it steers with the rocket); the saucers score
 when their missile hits you. A game is 99 time units; finish ahead and you get one more round in

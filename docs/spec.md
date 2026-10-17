@@ -192,7 +192,7 @@ Decided (2026-10-16):
   rotating ship on hardware. Now 7 DAC units per pixel at scale 16 on both axes: the field is about
   239 x 256, full width and ~80% of the Vectrex screen height.
 - **The 16 blanked lines are dropped**: the wrap space is 256 x 239, all visible; nothing can hide
-  in an invisible band. The rocket's start (column 114, row -14) is on the wrap seam.
+  in an invisible band.
 - **Objects crossing an edge** are drawn once per copy (up to four at a corner), lighting only the
   dots that fall inside the field.
 - **Pre-rotated ship.** The core's 32 headings (flips/transposes of 4 base images) have uneven
@@ -236,8 +236,13 @@ Decided (2026-10-16):
   no sound; the digits show the last scores and time. For 3 s after a game the buttons are ignored
   (the final score stays up). Then **any button** starts a game (the Vectrex has
   no coin slot: coin and Start in one press). Replay (hyperspace) is always on (the operator switch).
-- Buttons as on the cabinet panel: 1 rotate anticlockwise, 2 rotate clockwise, 3 thrust, 4 fire
-  (holding fire refires when the missile expires, as on the original).
+- Buttons as on the cabinet's control panel, left to right (Fire Missile, Thrust, Rotate, Rotate): 1 fire, 2 thrust,
+  3 rotate anticlockwise, 4 rotate clockwise (holding fire refires when the missile expires, as on
+  the original).
+- The rocket's state (position, heading, velocity) is never reset, as on the original (no reset on
+  its motion or memory boards): each game picks it up where the last one left it. The first game
+  after power-on rolls it at random, as the original's counters power up, seeded by the frame
+  count at the first press.
 - A game: the rocket appears 58 frames (~1.15 s) after start; time counts 0..99 once a second; at the
   roll-over the game ends, or once goes on in hyperspace if the rocket's score is higher.
 

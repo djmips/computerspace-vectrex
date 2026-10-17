@@ -31,10 +31,11 @@ SAUCER_CYCLE        equ      125                    ; frames between direction c
 SAUCER_GAP          equ      127                    ; rows between the two copies
 
 ; Controller buttons (Vec_Btn_State, stick 1), laid out like the cabinet panel
-BTN_CCW             equ      $01                    ; button 1: rotate anticlockwise
-BTN_CW              equ      $02                    ; button 2: rotate clockwise
-BTN_THRUST          equ      $04                    ; button 3: thrust
-BTN_FIRE            equ      $08                    ; button 4: fire
+; (left to right: Fire Missile, Thrust, Rotate anticlockwise, Rotate clockwise)
+BTN_FIRE            equ      $01                    ; button 1: fire
+BTN_THRUST          equ      $02                    ; button 2: thrust
+BTN_CCW             equ      $04                    ; button 3: rotate anticlockwise
+BTN_CW              equ      $08                    ; button 4: rotate clockwise
 
 ;***************************************************************************
 ; RAM
@@ -59,6 +60,7 @@ sc_dx               ds       1                      ; -1, 0, +1
 sc_dy               ds       1
 sc_timer            ds       1                      ; frames to the next direction change
 rng                 ds       1                      ; 8-bit LFSR state, never 0
+rk_cold             ds       1                      ; 1 until the first game rolls the rocket
 
 ; game (game.asm)
 game_on             ds       1                      ; 0: attract mode
@@ -147,10 +149,12 @@ start
                     clr      rk_vx
                     clr      rk_vy
                     clr      rot_acc
-                    ldd      #114*256               ; the original's start: column 114,
-                    std      rk_x
-                    ldd      #(FIELD_H-14)*256      ; row -14 (on the wrap seam)
+                    ldd      #120*256               ; mid-field until the first game rolls
+                    std      rk_x                   ; the rocket's power-up state (game_start)
+                    ldd      #112*256
                     std      rk_y
+                    lda      #1
+                    sta      rk_cold
                     ldd      #150*256               ; saucers start near the top, moving right
                     std      sc_x
                     ldd      #5*256
