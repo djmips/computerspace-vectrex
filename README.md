@@ -105,3 +105,34 @@ python optstars.py ../stars_b.inc 350 --half=1
   does not release them, so a list drawn straight after `Reset0Ref` collapses to a dot. Move first
   (`ldd #0` / `jsr Moveto_d`).
 - `VECTREX.I` is the Vectrex BIOS include (Bruce Tomlin, changed by Malban).
+
+## Credits
+
+- **Malban**: [VIDE](http://vide.malban.de/), the Vectrex IDE whose assembler (Asmj) builds this
+  cartridge, and his changes to `VECTREX.I`, the BIOS include written by **Bruce Tomlin**.
+- **Malban** and **Kristof Tuts**: the fast drawing technique: small scales even for moves, the next
+  move set up while the current one ramps, no polling. The dot loop and the star code are built on it.
+- **Alex Herbert**: the frame wait and beam zeroing, from his `FRWAIT` and `ZERGND` in *Protector*.
+  `frame_wait` recalibrates in the frame's spare time and skips it when a frame runs over, instead of
+  the BIOS `Wait_Recal`, and the short scale it leaves behind made the star field's opening move
+  nearly free (~250 cycles a frame). The beam is zeroed the way `ZERGND` does it everywhere but the
+  stars: `zero_beam`, `anchor_move` (each object's and digit's first move) and every re-anchor of
+  the dot chains.
+- **Mattias G** and **DarFPGA**: the FPGA recreation of the original boards and its sound, which
+  every rule, timing, shape and sound here was measured from (see the introduction).
+
+## License
+
+This repository's own work (the game's 6809 source, the generators in `tools/`, their generated
+tables and the documentation) is licensed under the **GNU General Public License
+v2.0 or later**; see [LICENSE](LICENSE). The same as the companion FPGA project,
+[djmips/computerspace](https://github.com/djmips/computerspace).
+
+- `VECTREX.I`, the Vectrex BIOS include, was written by
+  Bruce Tomlin and changed by Malban, as its header says; it is the include shipped with VIDE and
+  remains under its authors' terms.
+- No code from the FPGA core is included here. The game's behaviour, timings, star positions and
+  sounds were measured from that core and from the original's schematics; `docs/spec.md` cites the
+  core's files where each comes from.
+
+Computer Space is a trademark of its respective owners; this is a non-commercial preservation project.

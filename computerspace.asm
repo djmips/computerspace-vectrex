@@ -9,6 +9,17 @@
 ; 90 degrees: original x -> Vectrex Y, original y -> Vectrex X.
 ;
 ; DP stays $D0 for the whole frame; RAM is addressed extended.
+;
+; Credits:
+;   Malban: VIDE, whose assembler (Asmj) builds this cartridge, and his
+;     changes to VECTREX.I (the BIOS include, written by Bruce Tomlin).
+;   Malban and Kristof Tuts: the fast drawing technique: small scales even
+;     for moves, the next move set up while the current one ramps, no
+;     polling (the dot loop, fast_loop, and the star code).
+;   Alex Herbert: FRWAIT and ZERGND from Protector: the frame wait
+;     (frame_wait) and the beam zeroing used everywhere but the stars
+;     (zero_beam, anchor_move, the dot-chain re-anchors); FRWAIT's short
+;     leftover scale also made the stars' opening move nearly free.
 ;***************************************************************************
 
                     INCLUDE  "VECTREX.I"
